@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Gnom Clicker</title>
+</head>
+<body>
+  <div id="counter" aria-live="polite">Clicks: 0</div>
+
+  <!-- MAIN MENU -->
+  <div id="menu" aria-hidden="false">
+    <div class="menuCard">
+      <h1>Gnom Clicker</h1>
+
+      <div class="menuRow">
+        <label for="gnomUpload" class="smallLabel">Upload your gnom image (optional)</label>
+        <input id="gnomUpload" type="file" accept="image/*" />
+      </div>
+
+      <div id="menuActions" class="menuRow">
+        <button id="playBtn" class="primary">Play</button>
+        <button id="creditsBtn" class="secondary">Credits</button>
+      </div>
+
+      <!-- when Play is pressed this panel appears in-place for mode selection -->
+      <div id="modesPanel" class="hiddenIntro">
+        <h2 class="modesTitle">Select Mode</h2>
+        <div class="modesRow">
+          <button id="modeSpeed" class="modeBtn">SPEED (no cooldown)</button>
+          <button id="modeHard" class="modeBtn">HARD — 100 in 50s</button>
+          <button id="modeImp" class="modeBtn">IMPOSSIBLE — 500 in 5s</button>
+        </div>
+        <div class="modesRow">
+          <button id="modesBack" class="secondary">Back</button>
+        </div>
+      </div>
+
+      <div class="creditsInline">Name: Gnom Clicker</div>
+    </div>
+    <!-- hidden select kept for legacy script usage -->
+    <select id="difficulty" class="hiddenIntro" aria-hidden="true">
+      <option value="speed">speed</option>
+      <option value="hard">hard</option>
+      <option value="imp">imp</option>
+    </select>
+  </div>
+
+  <!-- Credits modal -->
+  <div id="credits" class="hiddenIntro" aria-hidden="true">
+    <div class="creditsCard">
+      <h2>Credits</h2>
+      <ul>
+        <li>GPT-5</li>
+        <li>Kimi</li>
+        <li>Dooly</li>
+        <li>Vercel (hosting)</li>
+      </ul>
+      <button id="closeCredits">Close</button>
+    </div>
+  </div>
+
+  <!-- Intro cutscene overlay -->
+  <div id="introOverlay" aria-hidden="true" class="hiddenIntro">
+    <button id="skipBtn" aria-label="Skip intro">✕</button>
+    <div class="park">
+      <div class="sun"></div>
+      <div class="tree tree-left"></div>
+      <div class="tree tree-right"></div>
+
+      <!-- Intro bomb that wanders -->
+      <img id="introBomb" src="bomb.png" alt="bomb" />
+      <!-- Intro pink bomb friend -->
+      <img id="introBombFriend" src="bomb.png" alt="bomb friend" />
+
+      <!-- ice cream van that will arrive and kidnap -->
+      <div class="van" aria-hidden="true">
+        <div class="van-body"></div>
+        <div class="van-window"></div>
+        <div class="van-wheel w1"></div>
+        <div class="van-wheel w2"></div>
+      </div>
+
+      <!-- a ragged net that drops when kidnapping -->
+      <div class="net" aria-hidden="true"></div>
+
+      <!-- jail cover (used as the 'captor' lid) -->
+      <div class="jailCover" aria-hidden="true"></div>
+
+      <div class="caption">A small story...</div>
+
+      <div class="butterflies">
+        <span class="butterfly b1"></span>
+        <span class="butterfly b2"></span>
+        <span class="butterfly b3"></span>
+      </div>
+    </div>
+  </div>
+
+  <main id="stage">
+    <button id="bombBtn" aria-label="Bomb button" disabled>
+      <img id="bombImg" src="bomb.png" alt="bomb" />
+    </button>
+
+    <!-- background music -->
+    <audio id="bgMusic" src="Elevator Music.mp3" loop preload="auto" autoplay></audio>
+
+    <!-- click sound -->
+    <audio id="clickSound" src="roblox-click-sound-(made-by-oliverleader08)-made-with-Voicemod.mp3" preload="auto"></audio>
+
+    <!-- scream on kidnap -->
+    <audio id="scream" src="screaming-emoji-meme.mp3" preload="auto"></audio>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+/* minimal, quick-made look with orange checkerboard background and simple menu */
+
+/* reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+
+/* Daydream font for counter */
+@font-face{
+  font-family: 'Daydream';
+  src: url('Daydream.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* bigger, scrolling checkerboard */
+body{
+  height:100%;
+  background-color:#ff9a2e;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.04) 75%, rgba(255,255,255,0.04)),
+    linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.04) 75%, rgba(255,255,255,0.04));
+  background-size: 140px 140px;
+  background-position: 0 0, 70px 70px;
+  font-family: Arial, Helvetica, sans-serif;
+  color:#000;
+  animation: scrollBG 20s linear infinite;
+}
+@keyframes scrollBG{ from{ background-position: 0 0, 70px 70px; } to{ background-position: -280px 0, -210px 70px; } }
+
+/* simple counter text */
+#counter{
+  position:fixed;
+  top:8px;
+  left:8px;
+  font-size:20px;
+  pointer-events:none;
+  font-family: 'Daydream', Arial, sans-serif;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+  transition: transform 120ms ease;
+}
+
+/* center stage */
+#stage{ height:100vh; display:flex; align-items:center; justify-content:center; }
+
+/* plain bomb button */
+#bombBtn{ background:transparent; border:0; padding:0; width:140px; height:140px; display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color: transparent; }
+#bombImg{ width:100%; height:100%; object-fit:contain; display:block; pointer-events:none; user-select:none; }
+
+/* small animations */
+.bounce { animation: clickBounce 140ms cubic-bezier(.2,.9,.3,1); }
+@keyframes clickBounce{ 0%{ transform: translateY(0) scale(1); } 40%{ transform: translateY(-8px) scale(0.98); } 100%{ transform: translateY(0) scale(1); } }
+.pop { transform: scale(1.14); }
+#bombBtn:focus{ outline:2px solid #000; outline-offset:2px; }
+
+/* Intro overlay styles (kept) */
+#introOverlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background: linear-gradient(#9ad6ff,#8fe08f); z-index:50; overflow:hidden; }
+#skipBtn{ position:fixed; right:12px; top:12px; z-index:60; background:rgba(0,0,0,0.6); color:#fff; border:0; width:40px; height:40px; border-radius:6px; font-size:18px; line-height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; pointer-events:auto; }
+#introOverlay .park{ position:relative; width:100%; height:100%; display:flex; align-items:flex-end; justify-content:center; pointer-events:none; overflow:hidden; }
+.sun{ position:absolute; top:6%; left:12%; width:120px; height:120px; background: radial-gradient(circle at 30% 30%, #fff8c4 0%, #ffd54f 30%, #ffb300 70%); border-radius:50%; box-shadow: 0 12px 40px rgba(0,0,0,0.08); animation: sunFloat 60s linear infinite; }
+@keyframes sunFloat{ 0%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } 100%{ transform: translateY(0) } }
+.tree{ position:absolute; bottom:14%; width:56px; height:110px; background:#4aa64a; border-radius:20px; transform-origin:center bottom; animation: treeSway 6s ease-in-out infinite; }
+.tree-left{ left:6%; animation-delay:0s } .tree-right{ right:6%; animation-delay:2s }
+@keyframes treeSway{ 0%{ transform: rotate(-1deg) } 50%{ transform: rotate(1.2deg) } 100%{ transform: rotate(-1deg) } }
+.park::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:36%; background: linear-gradient(#6ec66a,#4aa64a); box-shadow: inset 0 8px 12px rgba(0,0,0,0.06); }
+
+/* shorter wander animations for intro (faster) */
+#introBomb{ width:140px; height:140px; object-fit:contain; position:absolute; bottom:40%; left:50%; transform: translateX(-50%); pointer-events:none; z-index:10; animation: bombWander 12s linear forwards; }
+@keyframes bombWander{ 0%{ transform: translate(-8vw, 30vh) scale(0.7) rotate(-10deg); opacity:0 } 10%{ transform: translate(-2vw, 16vh) scale(0.95) rotate(6deg); opacity:1 } 40%{ transform: translate(8vw, 6vh) scale(1) rotate(-8deg) } 70%{ transform: translate(0vw, 2vh) scale(1.02) rotate(4deg) } 100%{ transform: translate(0,0) scale(1) rotate(0deg); opacity:1 } }
+#introBombFriend{ width:120px; height:120px; object-fit:contain; position:absolute; bottom:42%; left:20%; filter: hue-rotate(240deg) saturate(1.3); pointer-events:none; z-index:9; animation: pinkBombPlay 12s linear forwards; }
+@keyframes pinkBombPlay{ 0%{ transform: translate(0, 16vh) scale(0.8); opacity:0 } 12%{ transform: translate(0, 0) scale(1); opacity:1 } 30%{ transform: translate(8vw, -4vh) scale(1.05) rotate(8deg) } 55%{ transform: translate(-6vw, 2vh) scale(0.95) rotate(-6deg) } 100%{ transform: translate(0,0) scale(1); opacity:1 } }
+@keyframes kidnapFly{ 0%{ transform: translate(0,0) scale(1); opacity:1 } 100%{ transform: translate(0,-120vh) scale(0.4); opacity:0 } }
+
+/* van/net/jail styles preserved but faster enter */
+.van{ position:absolute; right:-30%; bottom:10%; width:220px; height:90px; pointer-events:none; transform: translateX(0); opacity:0; }
+.van .van-body{ position:absolute; left:0; right:0; top:10px; bottom:12px; background: linear-gradient(#fff,#f3d7d7); border-radius:10px; box-shadow: 0 6px 12px rgba(0,0,0,0.12); }
+.van .van-window{ position:absolute; left:18%; top:18px; width:34%; height:26px; background:#66b2ff; border-radius:3px; }
+.van-wheel{ position:absolute; bottom:6px; width:22px; height:22px; background:#222; border-radius:50%; box-shadow: inset 0 -4px 6px rgba(255,255,255,0.04); }
+.van .w1{ left:18px } .van .w2{ right:18px }
+.van-enter{ animation: vanEnter 900ms ease-out forwards; }
+@keyframes vanEnter{ 0%{ transform: translateX(30vw); right:-30%; opacity:0 } 30%{ opacity:1 } 100%{ transform: translateX(-6vw); right:6%; opacity:1 } }
+.van-kidnap{ animation: vanKidnap 400ms ease-in forwards; }
+@keyframes vanKidnap{ 0%{ transform: translateX(-6vw) } 100%{ transform: translateX(-10vw) } }
+
+.net{ position:absolute; width:200px; height:160px; left:50%; margin-left:-100px; bottom:32%; border-radius:6px; background: linear-gradient(180deg, rgba(200,200,200,0.08), rgba(120,120,120,0.06)); box-shadow: 0 12px 30px rgba(0,0,0,0.12); transform-origin: top center; transform: translateY(-220px) rotateX(20deg); opacity:0; pointer-events:none; }
+.net-drop{ animation: netDrop 300ms ease-in forwards; }
+@keyframes netDrop{ 0%{ opacity:0; transform: translateY(-220px) rotateX(20deg) } 60%{ opacity:1; transform: translateY(-30px) rotateX(6deg) } 100%{ opacity:1; transform: translateY(0) rotateX(0deg) } }
+
+.butterflies{ position:absolute; left:0; right:0; top:20%; pointer-events:none; }
+.butterfly{ position:absolute; width:14px; height:10px; background:rgba(255,255,255,0.9); border-radius:4px; opacity:0.9; }
+.b1{ left:20%; animation: flutter1 12s linear infinite; } .b2{ left:50%; animation: flutter2 14s linear infinite; } .b3{ left:75%; animation: flutter3 10s linear infinite; }
+
+.jailCover{ position:absolute; width:160px; height:80px; bottom:48%; background: linear-gradient(#444,#222); transform-origin: top center; left:calc(50% - 80px); border-radius:6px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); opacity:0; transform: translateY(-200px) rotateX(20deg); }
+.jailCover.captured{ animation: coverFallNow 500ms ease-in forwards; }
+@keyframes coverFallNow{ 0%{ opacity:0; transform: translateY(-200px) rotateX(20deg) } 60%{ opacity:1; transform: translateY(-20px) rotateX(5deg) } 100%{ opacity:1; transform: translateY(0) rotateX(0deg) } }
+
+.caption{ position:absolute; left:12%; bottom:12%; font-size:20px; color:#fff; text-shadow:0 1px 0 rgba(0,0,0,0.4); opacity:0.95; pointer-events:none; }
+
+.hiddenIntro{ display:none !important; }
+
+/* MENU STYLES */
+/* menu: dark, borderless, no background overlay */
+#menu{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:60; pointer-events:auto; }
+.menuCard{ background:transparent; padding:22px; border-radius:12px; width:92%; max-width:420px; text-align:center; color:#fff; backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.06); }
+.menuCard h1{ margin:0 0 6px 0; font-size:26px; letter-spacing:0.6px; color:#fff; text-shadow: 0 6px 30px rgba(0,0,0,0.45); }
+
+/* smaller label */
+.smallLabel{ font-size:12px; opacity:0.85; margin-bottom:6px; }
+
+/* general layout */
+.menuRow{ margin:10px 0; display:flex; flex-direction:column; align-items:center; gap:8px; }
+
+/* buttons */
+button.primary{ padding:12px 16px; border-radius:10px; border:0; cursor:pointer; background: linear-gradient(180deg,#ff7a2c,#ff5a00); color:#fff; box-shadow: 0 8px 24px rgba(255,90,0,0.14); font-weight:700; }
+button.secondary{ padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.08); cursor:pointer; background:transparent; color:#fff; }
+.modeBtn{ padding:12px 14px; border-radius:10px; border:0; background: linear-gradient(180deg,#333,#222); color:#fff; width:100%; max-width:320px; font-weight:700; box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+
+/* modes panel */
+#modesPanel{ margin-top:8px; }
+.modesTitle{ margin:6px 0 8px 0; font-size:18px; color:#fff; }
+.modesRow{ display:flex; flex-direction:column; gap:8px; align-items:center; }
+
+/* hidden helper */
+.hiddenIntro{ display:none !important; }
+
+/* credits inline style in dark mode */
+.creditsInline{ margin-top:8px; font-size:12px; color:rgba(255,255,255,0.7); }
+
+/* flip pink friend horizontally for cutscene */
+#introBombFriend{ width:120px; height:120px; object-fit:contain; position:absolute; bottom:42%; left:20%; filter: hue-rotate(240deg) saturate(1.3); pointer-events:none; z-index:9; animation: pinkBombPlay 12s linear forwards; transform: scaleX(-1); }
+
+/* Credits modal */
+#credits{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.5); z-index:70; }
+.creditsCard{ background:#fff; padding:16px; border-radius:8px; width:86%; max-width:300px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); text-align:left; }
+.creditsCard h2{ margin-top:0; }
+.creditsCard ul{ padding-left:18px; }
+.creditsCard button{ margin-top:10px; padding:8px 10px; border-radius:6px; border:0; cursor:pointer; }
